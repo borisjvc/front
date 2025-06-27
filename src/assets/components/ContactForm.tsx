@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom'
 import axios from 'axios';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -9,6 +11,8 @@ export default function ContactForm() {
     mensaje: '',
   });
 
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData({
@@ -17,19 +21,31 @@ export default function ContactForm() {
     });
   };
 
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!recaptchaToken) {
+      alert('Por favor, verifica el reCAPTCHA.');
+      return;
+    }
+
     try {
       const response = await axios.post('http://localhost:3001/postForm', formData);
       console.log('Formulario enviado con éxito:', response.data);
       alert('¡Mensaje enviado con éxito!');
-      // Opcional: limpiar el formulario después de enviar
+
+      // Limpiar el formulario y reCAPTCHA
       setFormData({
         nombre: '',
         correo: '',
         telefono: '',
         mensaje: '',
       });
+      setRecaptchaToken(null);
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
       alert('Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.');
@@ -88,6 +104,37 @@ export default function ContactForm() {
             className="w-full border border-gray-300 p-2 rounded-md resize-none focus:outline-none focus:ring-2 focus:ring-blue-400"
           ></textarea>
         </div>
+
+        <div className="flex items-start gap-2 text-sm">
+  <input
+    id="acepto"
+    type="checkbox"
+    required
+    className="mt-1"
+  />
+  <label htmlFor="acepto" className="text-gray-700">
+    Acepto los{' '}
+    <a
+      href="/terminos-y-condiciones"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 font-semibold underline hover:text-blue-800"
+    >
+      Términos y Condiciones
+    </a>
+  </label>
+</div>
+
+
+        {/* reCAPTCHA */}
+        <div className="flex justify-center">
+          <ReCAPTCHA
+            sitekey="6LeS1G0rAAAAACs5kkX0oZHbGaFMxI6UfeoDnMoK" 
+            onChange={handleRecaptchaChange}
+          />
+        </div>
+
+          
 
         <button
           type="submit"
