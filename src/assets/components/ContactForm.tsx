@@ -23,6 +23,11 @@ export default function ContactForm() {
   });
 
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -35,24 +40,45 @@ export default function ContactForm() {
     setRecaptchaToken(token);
   };
 
+  const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTermsAccepted(e.target.checked);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!recaptchaToken) {
-      alert('Por favor, verifica el reCAPTCHA.');
+    setMessage(null);
+
+    // Validaciones
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[+]?\d{7,15}$/; // admite + y 7-15 dígitos
+    if (!emailRegex.test(formData.correo)) {
+      setMessage({ type: 'error', text: 'Ingresa un correo electrónico válido.' });
       return;
     }
+    if (formData.telefono && !phoneRegex.test(formData.telefono)) {
+      setMessage({ type: 'error', text: 'Ingresa un teléfono válido (solo dígitos y opcional +).' });
+      return;
+    }
+    if (!termsAccepted) {
+      setMessage({ type: 'error', text: 'Debes aceptar los Términos y Condiciones.' });
+      return;
+    }
+    if (!recaptchaToken) {
+      setMessage({ type: 'error', text: 'Por favor, verifica el reCAPTCHA.' });
+      return;
+    }
+    setLoading(true);
     try {
-      const response = await axios.post(
-        'http://localhost:3001/postForm',
-        formData
-      );
-      console.log('Formulario enviado con éxito:', response.data);
-      alert('¡Mensaje enviado con éxito!');
+      await axios.post(`${API_URL}/contact`, { ...formData, recaptchaToken, terms: termsAccepted });
+      setMessage({ type: 'success', text: '¡Mensaje enviado con éxito!' });
       setFormData({ nombre: '', correo: '', telefono: '', mensaje: '' });
+      setTermsAccepted(false);
       setRecaptchaToken(null);
     } catch (error) {
       console.error('Error al enviar el formulario:', error);
-      alert('Hubo un error al enviar el mensaje. Por favor, inténtalo de nuevo.');
+      setMessage({ type: 'error', text: 'Hubo un error al enviar el mensaje. Intenta nuevamente más tarde.' });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -151,7 +177,7 @@ export default function ContactForm() {
 
         {/* Términos y condiciones */}
         <div className="flex items-center justify-center text-sm">
-          <input id="acepto" type="checkbox" required className="mr-2" />
+          <input id="acepto" type="checkbox" checked={termsAccepted} onChange={handleCheckbox} required className="mr-2" />
           <label htmlFor="acepto" className="text-gray-700">
             Acepto los{' '}
             <Link
@@ -193,12 +219,17 @@ export default function ContactForm() {
           />
         </div>
 
+        {message && (
+          <p className={`text-center ${message.type === 'success' ? 'text-green-600' : 'text-red-600'} font-medium`}>{message.text}</p>
+        )}
+
         {/* Botón */}
         <button
           type="submit"
-          className="block mx-auto mt-4 bg-blue-600 text-white font-semibold py-3 px-8 rounded-xl hover:bg-blue-700 hover:scale-105 transition duration-300"
+          disabled={loading}
+          className={`block mx-auto mt-4 bg-blue-600 text-white font-semibold py-3 px-8 rounded-xl transition duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 hover:scale-105'}`}
         >
-          Enviar mensaje
+          {loading ? 'Enviando...' : 'Enviar mensaje'}
         </button>
       </form>
     </section>

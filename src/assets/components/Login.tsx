@@ -1,13 +1,45 @@
 import { FaMicrochip } from 'react-icons/fa';
 import { useState } from 'react';
-import { sanitizeInput } from '../../utils/Sanitize';
-
-
+import { sanitizeInput } from '../../utils/sanitize';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 export default function Login() {
 
 const [email, setEmail] = useState('');
 const [password, setPassword] = useState('');
+const [loading, setLoading] = useState(false);
+const [errorMsg, setErrorMsg] = useState('');
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+const navigate = useNavigate();
+
+const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setErrorMsg('');
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    setErrorMsg('Ingresa un correo electrónico válido');
+    return;
+  }
+  if (password.length < 6) {
+    setErrorMsg('La contraseña debe tener al menos 6 caracteres');
+    return;
+  }
+  setLoading(true);
+  try {
+    const { data } = await axios.post(`${API_URL}/login`, { email, password });
+    localStorage.setItem('token', data.token);
+    navigate('/dashboard');
+  } catch (err: any) {
+    if (axios.isAxiosError(err) && err.response) {
+      setErrorMsg(err.response.data?.message || 'Credenciales inválidas');
+    } else {
+      setErrorMsg('Error de red. Intenta nuevamente');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <div className="min-h-screen grid grid-cols-1 md:grid-cols-2">
@@ -35,7 +67,7 @@ const [password, setPassword] = useState('');
         <div className="bg-white p-8 rounded-2xl shadow-xl w-full max-w-sm border-4 border-blue-600 animate-slide-in">
           <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">Iniciar Sesión</h2>
 
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Correo electrónico</label>
               <input
@@ -60,11 +92,14 @@ const [password, setPassword] = useState('');
               />
             </div>
 
+            {errorMsg && <p className="text-red-600 text-center text-sm">{errorMsg}</p>}
+
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white font-semibold py-3 rounded-lg hover:bg-blue-700 hover:scale-105 transition duration-300"
+              disabled={loading}
+              className={`w-full bg-blue-600 text-white font-semibold py-3 rounded-lg transition duration-300 ${loading ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 hover:scale-105'}`}
             >
-              Ingresar
+              {loading ? 'Ingresando...' : 'Ingresar'}
             </button>
           </form>
         </div>
