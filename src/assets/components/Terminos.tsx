@@ -1,55 +1,91 @@
+import { FaShieldAlt, FaUserShield, FaLock, FaFileContract, FaSyncAlt, FaEnvelopeOpenText, } from 'react-icons/fa';
+
 export default function TerminosCondiciones() {
   return (
-    <div className="min-h-screen bg-blue-50 text-gray-800 px-6 py-10 flex flex-col items-center">
-      <div className="w-full max-w-3xl bg-white p-8 rounded-xl shadow-md">
-        <h1 className="text-3xl font-bold text-blue-700 mb-6 text-center">
-          Términos y Condiciones
-        </h1>
-
-        <section className="space-y-6 text-justify leading-relaxed text-sm sm:text-base">
-          <p>
-            Bienvenido/a. Al utilizar nuestro sitio web y servicios, aceptas cumplir con los siguientes términos y condiciones. Por favor, léelos cuidadosamente antes de continuar.
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 px-6 py-16 flex flex-col items-center animate-fade-in">
+      <div className="w-full max-w-3xl bg-white p-8 rounded-2xl shadow-2xl space-y-8">
+        {/* Encabezado */}
+        <div className="flex flex-col items-center text-center space-y-2">
+          <FaShieldAlt className="text-blue-600 text-5xl animate-bounce" />
+          <h1 className="text-3xl font-bold text-blue-700">Términos y Condiciones</h1>
+          <p className="text-gray-600 text-sm">
+            Última actualización: julio 2025
           </p>
+        </div>
 
-          <div>
-            <h2 className="text-blue-600 font-semibold text-lg mb-2">1. Uso del servicio</h2>
-            <p>
-              El acceso y uso de este sitio es exclusivamente para fines informativos. Te comprometes a no utilizarlo para actividades ilegales o no autorizadas.
-            </p>
+        {/* Secciones */}
+        <div className="space-y-8 text-gray-700 text-sm sm:text-base leading-relaxed">
+          {/* Uso del Servicio */}
+          <div className="flex items-start gap-4">
+            <FaFileContract className="text-blue-500 text-xl mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-blue-700 mb-1">1. Uso del servicio</h2>
+              <p>
+                Este sitio está destinado exclusivamente a fines informativos. Te comprometes a
+                no utilizarlo para fines ilegales, fraudulentos o no autorizados.
+              </p>
+            </div>
           </div>
 
-          <div>
-            <h2 className="text-blue-600 font-semibold text-lg mb-2">2. Privacidad</h2>
-            <p>
-              Respetamos tu privacidad. Los datos proporcionados a través de formularios serán utilizados únicamente con fines de contacto o servicio, según lo especificado.
-            </p>
+          {/* Privacidad */}
+          <div className="flex items-start gap-4">
+            <FaLock className="text-blue-500 text-xl mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-blue-700 mb-1">2. Privacidad</h2>
+              <p>
+                Respetamos tu privacidad. La información que proporcionas será utilizada
+                únicamente para fines de contacto o soporte, conforme a nuestra política de
+                privacidad.
+              </p>
+            </div>
           </div>
 
-          <div>
-            <h2 className="text-blue-600 font-semibold text-lg mb-2">3. Propiedad intelectual</h2>
-            <p>
-              Todo el contenido del sitio, incluyendo textos, imágenes, logotipos y diseño, pertenece a sus respectivos propietarios y está protegido por derechos de autor.
-            </p>
+          {/* Propiedad intelectual */}
+          <div className="flex items-start gap-4">
+            <FaUserShield className="text-blue-500 text-xl mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-blue-700 mb-1">3. Propiedad intelectual</h2>
+              <p>
+                Todos los contenidos de este sitio (textos, imágenes, logotipos, etc.) están
+                protegidos por derechos de autor y pertenecen a sus respectivos propietarios.
+              </p>
+            </div>
           </div>
 
-          <div>
-            <h2 className="text-blue-600 font-semibold text-lg mb-2">4. Cambios en los términos</h2>
-            <p>
-              Nos reservamos el derecho de actualizar estos términos en cualquier momento. Te recomendamos revisarlos periódicamente para estar al tanto de posibles cambios.
-            </p>
+          {/* Cambios */}
+          <div className="flex items-start gap-4">
+            <FaSyncAlt className="text-blue-500 text-xl mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-blue-700 mb-1">4. Cambios en los términos</h2>
+              <p>
+                Nos reservamos el derecho de modificar estos términos en cualquier momento.
+                Recomendamos revisar esta sección periódicamente para estar informado.
+              </p>
+            </div>
           </div>
 
-          <div>
-            <h2 className="text-blue-600 font-semibold text-lg mb-2">5. Contacto</h2>
-            <p>
-              Si tienes alguna pregunta sobre estos términos, puedes contactarnos a través del formulario del sitio o enviarnos un correo.
-            </p>
+          {/* Contacto */}
+          <div className="flex items-start gap-4">
+            <FaEnvelopeOpenText className="text-blue-500 text-xl mt-1" />
+            <div>
+              <h2 className="text-lg font-semibold text-blue-700 mb-1">5. Contacto</h2>
+              <p>
+                Para dudas o comentarios sobre estos términos, puedes contactarnos mediante el
+                formulario en nuestra sección de contacto o por correo electrónico.
+              </p>
+            </div>
           </div>
+        </div>
 
-          <p className="text-sm text-center text-gray-500 mt-10">
-            Última actualización: junio 2025
-          </p>
-        </section>
+        {/* Botón de volver */}
+        <div className="flex justify-center pt-6">
+          <a
+            href="/"
+            className="inline-block bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition"
+          >
+            Volver al inicio
+          </a>
+        </div>
       </div>
     </div>
   );
