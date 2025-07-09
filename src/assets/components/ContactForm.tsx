@@ -214,7 +214,7 @@ export default function ContactForm() {
         {/* reCAPTCHA */}
         <div className="flex justify-center">
           <ReCAPTCHA
-            sitekey="6LeS1G0rAAAAACs5kkX0oZHbGaFMxI6UfeoDnMoK"
+            sitekey="6LePwnwrAAAAAKmmZjHwQsNl8M82El_jmdSGBFXi"
             onChange={handleRecaptchaChange}
           />
         </div>
