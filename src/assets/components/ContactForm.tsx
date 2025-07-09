@@ -28,6 +28,7 @@ export default function ContactForm() {
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+  const RECAPTCHA_KEY = import.meta.env.VITE_RECAPTCHA_KEY || '';
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -214,7 +215,7 @@ export default function ContactForm() {
         {/* reCAPTCHA */}
         <div className="flex justify-center">
           <ReCAPTCHA
-            sitekey="6LePwnwrAAAAAKmmZjHwQsNl8M82El_jmdSGBFXi"
+            sitekey={RECAPTCHA_KEY}
             onChange={handleRecaptchaChange}
           />
         </div>
