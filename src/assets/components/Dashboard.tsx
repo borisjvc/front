@@ -42,6 +42,31 @@ export default function Dashboard() {
     navigate('/login');
   };
 
+  // Alternar el status de un lead
+  const toggleStatus = async (leadId: number, currentStatus: boolean) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      setErrorMsg('Sesión expirada. Vuelve a iniciar sesión.');
+      return;
+    }
+    try {
+      await axios.patch(
+        `${API_URL}/leads/${leadId}/status`,
+        { status: !currentStatus },
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+      // Actualizar estado localmente
+      setLeads((prev) =>
+        prev.map((l) => (l.id === leadId ? { ...l, status: !currentStatus } : l))
+      );
+    } catch (err: any) {
+      console.error('Error al actualizar status:', err);
+      setErrorMsg('No se pudo actualizar el estado');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-50 px-6 py-10">
       {/* Header */}
@@ -101,10 +126,14 @@ export default function Dashboard() {
                   <td className="px-6 py-4 hidden md:table-cell text-gray-600">{lead.telefono}</td>
                   <td className="px-6 py-4 hidden lg:table-cell text-gray-600">{lead.mensaje}</td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <FaCircle className="text-green-500 text-xs" />
-                      <span>Nuevo</span>
-                    </div>
+                    <button
+                      onClick={() => toggleStatus(lead.id, lead.status)}
+                      className="flex items-center gap-2 focus:outline-none"
+                      title="Alternar estado"
+                    >
+                      <FaCircle className={`text-xs ${lead.status ? 'text-gray-400' : 'text-green-500'}`} />
+                      <span>{lead.status ? 'Revisado' : 'Nuevo'}</span>
+                    </button>
                   </td>
                 </tr>
               ))}
