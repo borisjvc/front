@@ -21,10 +21,10 @@ ENV VITE_API_URL=$VITE_API_URL
 RUN npm run build
 
 # Exponer el puerto
-EXPOSE 3000
+EXPOSE 3131
 
 # Variables de entorno
 ENV NODE_ENV=production
 
 # Comando para ejecutar la aplicación
-CMD ["npm", "run", "preview", "--", "--host", "0.0.0.0", "--port", "3000"]
+CMD ["serve", "-s", "dist"]
