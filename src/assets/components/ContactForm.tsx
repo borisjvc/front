@@ -60,7 +60,7 @@ export default function ContactForm() {
       return;
     }
     if (!termsAccepted) {
-      setMessage({ type: 'error', text: 'Debes aceptar los Términos y Condiciones.' });
+      setMessage({ type: 'error', text: 'Debe aceptar los Términos y Condiciones.' });
       return;
     }
     if (!recaptchaToken) {
