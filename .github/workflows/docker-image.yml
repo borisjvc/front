@@ -45,5 +45,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}      # 22
           script: |
             cd /root/projects/victoriovelazquezsoto
-            docker compose pull ContactForm_Frontend        # descarga la nueva imagen
-            docker compose up -d ContactForm_Frontend       # levanta sólo ese servicio
+            docker compose pull victoriovelazquezsoto-frontend        # descarga la nueva imagen
+            docker compose up -d victoriovelazquezsoto-frontend       # levanta sólo ese servicio
