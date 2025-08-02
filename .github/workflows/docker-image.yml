@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy-frontend:
-    runs-on: self-hosted   # tu runner propio. Cámbialo si usas el runner de GitHub.
+    runs-on: ubuntu-latest   # tu runner propio. Cámbialo si usas el runner de GitHub.
 
     steps:
       # 1) Descarga del código
