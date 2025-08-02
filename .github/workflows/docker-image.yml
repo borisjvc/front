@@ -1,0 +1,49 @@
+name: Build & Deploy Frontend
+
+on:
+  push:
+    branches: [ main ]   # se dispara sólo cuando cambie la rama principal
+
+jobs:
+  deploy-frontend:
+    runs-on: self-hosted   # tu runner propio. Cámbialo si usas el runner de GitHub.
+
+    steps:
+      # 1) Descarga del código
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2) Prepara Docker Buildx (builder avanzado, cache, multi-platform, etc.)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # 3) Login a Docker Hub
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # 4) Construir y publicar la imagen del frontend
+      - name: Build & Push Frontend Image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./front              # directorio donde está tu Dockerfile
+          file: ./front/Dockerfile
+          push: true
+          tags: mushrroom/93devback:latest   # repo:tag en Docker Hub
+          build-args: |
+            VITE_API_URL=http://localhost:3244
+
+      # 5) Conectarse por SSH al VPS y actualizar sólo el servicio frontend
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SSH_HOST }}      # 167.172.150.250
+          username: ${{ secrets.SSH_USER }}  # root
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}      # 22
+          script: |
+            cd /root/projects/victoriovelazquezsoto
+            docker compose pull ContactForm_Frontend        # descarga la nueva imagen
+            docker compose up -d ContactForm_Frontend       # levanta sólo ese servicio
