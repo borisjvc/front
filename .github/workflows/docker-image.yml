@@ -6,7 +6,7 @@ on:
 
 jobs:
   deploy-frontend:
-    runs-on: self-runner  
+    runs-on: ubuntu-latest 
 
     steps:
       # 1) Descarga del código
