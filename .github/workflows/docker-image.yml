@@ -28,8 +28,8 @@ jobs:
       - name: Build & Push Frontend Image
         uses: docker/build-push-action@v5
         with:
-          context: ./front              # directorio donde está tu Dockerfile
-          file: ./front/Dockerfile
+          context: .                 # raíz del repo en GitHub
+          file: ./Dockerfile         # el Dockerfile está en la raíz
           push: true
           tags: mushrroom/93devback:latest   # repo:tag en Docker Hub
           build-args: |
