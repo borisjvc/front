@@ -31,7 +31,7 @@ jobs:
           context: .                 # raíz del repo en GitHub
           file: ./Dockerfile         # el Dockerfile está en la raíz
           push: true
-          tags: mushrroom/93devback:latest   # repo:tag en Docker Hub
+          tags: mushrroom/victoriovelazquezsoto-frontend:latest   # repo:tag en Docker Hub
           build-args: |
             VITE_API_URL=http://localhost:3244
 
@@ -45,5 +45,5 @@ jobs:
           port: ${{ secrets.SSH_PORT }}      # 22
           script: |
             cd /root/projects/victoriovelazquezsoto
-            docker compose pull victoriovelazquezsoto-frontend        # descarga la nueva imagen
-            docker compose up -d victoriovelazquezsoto-frontend       # levanta sólo ese servicio
+            docker compose pull frontend              # descarga la nueva imagen
+            docker compose up -d --force-recreate frontend
