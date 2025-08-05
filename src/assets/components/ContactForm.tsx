@@ -193,7 +193,7 @@ export default function ContactForm() {
         {/* Redes sociales */}
         <div className="text-center mt-4">
           <h3 className="text-sm font-semibold text-gray-700 mb-3">
-            Nuestras redes sociales
+            Nuestras redes
           </h3>
           <div className="flex justify-center gap-5 text-blue-600 text-xl">
             <a href="#" className="hover:text-blue-800 transition-all">
